@@ -1,0 +1,44 @@
+version: '3.9'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+
+  postgres_db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: testdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  playwright_tests:
+    build: ./tests
+    depends_on:
+      - backend
+    environment:
+      - BASE_URL=http://backend:3000
+    # Optionnel : pour voir le navigateur
+    # stdin_open: true
+    # tty: true
+
+volumes:
+  pgdata:
+
+
+  playwright_tests:
+    image: mcr.microsoft.com/playwright:focal
+    container_name: playwright_tests
+    depends_on:
+      - backend
+    working_dir: /tests
+    volumes:
+      - ./tests:/tests
+    command: npx playwright test

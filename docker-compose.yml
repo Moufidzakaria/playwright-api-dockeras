@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:17
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5433:5432"  # <- change de 5432 à 5433
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    container_name: backend
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      PORT: ${PORT}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+
+  tests:
+    image: mcr.microsoft.com/playwright:focal
+    container_name: playwright_tests
+    depends_on:
+      - backend
+    working_dir: /tests
+    volumes:
+      - ./tests:/tests
+    command: ["npx", "playwright", "test"]
+
+volumes:
+  pg_data:
