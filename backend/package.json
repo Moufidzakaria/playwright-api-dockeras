@@ -1,21 +1,30 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "API backend avec Express, PostgreSQL et Jest",
+  "main": "app.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "jest --experimental-vm-modules"
   },
-  "keywords": [],
+  "keywords": [
+    "express",
+    "postgresql",
+    "jest",
+    "api"
+  ],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "pg": "^8.16.3"
   },
   "devDependencies": {
-    "@playwright/test": "^1.55.0"
+    "@playwright/test": "^1.55.0",
+    "jest": "^30.1.1",
+    "nodemon": "^3.1.7"
   }
 }
